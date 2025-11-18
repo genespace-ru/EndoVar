@@ -1,0 +1,37 @@
+genes:
+  type: table
+  displayName: Genes
+  order: '10'
+  primaryKey: ID
+  scheme:
+    columns:
+    - ID:
+        type: KEYTYPE
+        autoIncrement: true
+        primaryKey: true
+        doc: Gene internal identifier.
+    - HGNC:
+        type: VARCHAR(20)
+        doc: The HGNC approved gene symbol.
+
+  queries:
+
+  - '*** Selection view ***':
+      type: 1D
+      roles: '@AllRoles'
+      code: |
+        SELECT 
+           ID AS "Code",
+           HGNC AS "Name"
+        FROM genes
+        ORDER BY HGNC
+
+  - All records:
+      type: 1D
+      roles: '@AllRoles'
+      code: |
+        SELECT 
+           ID AS "Code",
+           HGNC AS "Name"
+        FROM genes
+        ORDER BY HGNC

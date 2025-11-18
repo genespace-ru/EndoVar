@@ -15,6 +15,7 @@ EndoVar:
       - _logout_
   application:
   - _welcome_
+  - genes
   scripts:
   - Post-db
   - dictionaries
