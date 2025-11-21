@@ -19,5 +19,6 @@ EndoVar:
   scripts:
   - Post-db
   - dictionaries
+  - genes
 
 

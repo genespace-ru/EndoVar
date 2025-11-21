@@ -18,24 +18,31 @@ genes:
         doc: Gene name from HGNC.
     - summary:
         type: VARCHAR(1000)
+        canBeNull: true
         doc: extract of gene summary texts for genes that have them
     - ensembl_gene_id:
         type: VARCHAR(20)
+        canBeNull: true
         doc: Ensembl gene ID
     - refseq_accession:
         type: VARCHAR(20)
+        canBeNull: true
         doc: RefSeq nucleotide accession(s)
     - uniprot_ids:
         type: VARCHAR(20)
+        canBeNull: true
         doc: UniProt protein accession
     - omim_id:
         type: VARCHAR(20)
+        canBeNull: true
         doc: Online Mendelian Inheritance in Man (OMIM) ID
     - orphanet:
         type: VARCHAR(20)
+        canBeNull: true
         doc: Orphanet ID
     - mane_select:
         type: VARCHAR(50)
+        canBeNull: true
         doc: NCBI and Ensembl transcript IDs/acessions including the version number for one high-quality representative transcript per protein-coding gene that is well-supported by experimental data and represents the biology of the gene. The IDs are delimited by |.
 
   queries:
