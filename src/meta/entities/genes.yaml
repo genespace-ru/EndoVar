@@ -17,7 +17,7 @@ genes:
         type: VARCHAR(100)
         doc: Gene name from HGNC.
     - summary:
-        type: VARCHAR(1000)
+        type: VARCHAR(1900)
         canBeNull: true
         doc: extract of gene summary texts for genes that have them
     - ensembl_gene_id:
@@ -62,7 +62,14 @@ genes:
       roles: '@AllRoles'
       code: |
         SELECT 
-           ID AS "Code",
-           HGNC AS "Name"
+           HGNC AS "HGNC",
+           name, 
+           summary,
+           ensembl_gene_id AS "Ensembl ID;<quick visible='true' />",
+           refseq_accession AS "Refseq;<quick visible='true' />",
+           uniprot_ids AS "Uniprot;<quick visible='true' />",
+           omim_id AS "OMIM ID;<quick visible='true' />",
+           orphanet AS "Orphanet;<quick visible='true' />", 
+           mane_select AS "MANE_SELECT;<quick visible='true' />"
         FROM genes
         ORDER BY HGNC
