@@ -60,6 +60,7 @@ genes:
   - All records:
       type: 1D
       roles: '@AllRoles'
+      layout: '{"quickType":"select"}'
       code: |
         SELECT 
            HGNC AS "HGNC",
