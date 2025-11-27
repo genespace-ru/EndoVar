@@ -47,30 +47,48 @@ genes:
 
   queries:
 
-  - '*** Selection view ***':
-      type: 1D
-      roles: '@AllRoles'
-      code: |
-        SELECT 
-           ID AS "Code",
-           HGNC AS "Name"
-        FROM genes
-        ORDER BY HGNC
+    - '*** Selection view ***':
+        type: 1D
+        roles: '@AllRoles'
+        code: |
+            SELECT 
+                ID AS "Code",
+                HGNC AS "Name"
+            FROM genes
+            ORDER BY HGNC
 
-  - All records:
-      type: 1D
-      roles: '@AllRoles'
-      layout: '{"quickType":"select"}'
-      code: |
-        SELECT 
-           HGNC AS "HGNC",
-           name, 
-           summary,
-           ensembl_gene_id AS "Ensembl ID;<quick visible='true' />",
-           refseq_accession AS "Refseq;<quick visible='true' />",
-           uniprot_ids AS "Uniprot;<quick visible='true' />",
-           omim_id AS "OMIM ID;<quick visible='true' />",
-           orphanet AS "Orphanet;<quick visible='true' />", 
-           mane_select AS "MANE_SELECT;<quick visible='true' />"
-        FROM genes
-        ORDER BY HGNC
+    - All records:
+        type: 1D
+        roles: '@AllRoles'
+        layout: '{"quickType":"select"}'
+        code: |
+            SELECT 
+                HGNC AS "HGNC",
+                '<link table="genes" queryName="Card" using="___ID" columns="ID" />' AS ";HGNC",
+                name, 
+                summary,
+                ensembl_gene_id AS "Ensembl ID;<quick visible='true' />",
+                refseq_accession AS "Refseq;<quick visible='true' />",
+                uniprot_ids AS "Uniprot;<quick visible='true' />",
+                omim_id AS "OMIM ID;<quick visible='true' />",
+                orphanet AS "Orphanet;<quick visible='true' />", 
+                mane_select AS "MANE_SELECT;<quick visible='true' />"
+            FROM genes
+            ORDER BY HGNC
+    - Card:
+        layout: '{"tableBox":"gene", "mode":"named", "hideTitle":"true"}'
+        invisible: true
+        roles: "@AllRoles"
+        code: |-
+            SELECT
+                gene_ID AS "___ID"
+            FROM genes
+
+    - Info:
+        roles: "@AllRoles"
+        layout: '{"tableBox":"geneInfo", "mode":"named", "filterUI":"no", "hideTitle":"true"}'
+        invisible: true
+        code: |-
+            SELECT
+                name
+            FROM genes
