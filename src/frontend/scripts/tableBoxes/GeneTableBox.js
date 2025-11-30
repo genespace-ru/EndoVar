@@ -11,8 +11,8 @@ class GeneTableBox extends Component
   {
     const gene = this.props.value.data.attributes.rows[0];
 
-    this.title = gene.Title.value;
-    be5.ui.setTitle(this.title);
+    //this.title = gene.Title.value;
+    //be5.ui.setTitle(this.title);
 
     const tableRef = '#!table/';
   	const steps = [

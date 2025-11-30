@@ -81,7 +81,7 @@ genes:
         roles: "@AllRoles"
         code: |-
             SELECT
-                gene_ID AS "___ID"
+                gene_ID AS "ID"
             FROM genes
 
     - Info:

@@ -20,3 +20,5 @@ import 'be5-react/src/css/languageSelector.css';
 import 'be5-react/src/css/main.css';
 
 import '../images/favicon.ico';
+import './tableBoxes/GeneTableBox';
+import './tableBoxes/GeneInfoTableBox';
