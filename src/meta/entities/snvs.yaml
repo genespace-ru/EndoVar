@@ -11,19 +11,19 @@ snvs:
         primaryKey: true
         doc: SNV internal identifier.
     - V:
-        type: VARCHAR(50)
+        type: VARCHAR(1000)
         doc: Variant
     - C:
-        type: VARCHAR(20)
+        type: VARCHAR(100)
         doc: Chromosome number
     - P:
-        type: VARCHAR(20)
+        type: VARCHAR(100)
         doc: SNV position
     - R:
-        type: VARCHAR(20)
+        type: VARCHAR(1000)
         doc: Reference base
     - A:
-        type: VARCHAR(20)
+        type: VARCHAR(1000)
         doc: Alternative base
     - G:
         type: VARCHAR(20)
