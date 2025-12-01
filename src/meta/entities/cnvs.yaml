@@ -1,0 +1,103 @@
+cnvs:
+  type: table
+  displayName: CNV
+  order: '20'
+  primaryKey: ID
+  scheme:
+    columns:
+    - ID:
+        type: KEYTYPE
+        autoIncrement: true
+        primaryKey: true
+        doc: CNV internal identifier.
+    - gene:
+        type: VARCHAR(20)
+        doc: Genes affected by variation
+    - status:
+        type: VARCHAR(20)
+        doc: Copy number loss/ Copy number gain
+    - CHR:
+        type: VARCHAR(20)
+        doc: Chromosome number
+    - band:
+        type: VARCHAR(20)
+        doc: band
+    - seg_start:
+        type: VARCHAR(20)
+        doc: start of CNV
+    - seg_end:
+        type: VARCHAR(20)
+        doc: end of CNV
+    - Positions:
+        type: VARCHAR(30)
+        doc: coordinates of CNV
+    - ICD10:
+        type: VARCHAR(20)
+        doc: ICD10 code of patient' diagnosis
+    - Pathogenicity:
+        type: VARCHAR(50)
+        canBeNull: true
+        doc: interpretation of the pathogenicity score
+    - Newly_discovered:
+        type: VARCHAR(20)
+        doc: is CNV are previously reported in Clinvar?
+    - ClinVar:
+        type: VARCHAR(50)
+        canBeNull: true
+        doc: Clinical interpretation of the copy-number variant by submitters     
+
+  queries:
+
+    - '*** Selection view ***':
+        type: 1D
+        roles: '@AllRoles'
+        code: |
+            SELECT 
+                ID AS "Code",
+                gene,
+                CHR,
+                Positions,
+                status
+            FROM cnvs
+            ORDER BY CHR
+
+    - All records:
+        type: 1D
+        roles: '@AllRoles'
+        #layout: '{"topForm":"TopFilter", "quickType":"select"}'
+        layout: '{"quickType":"select"}'
+        #operations:
+        #- TopFilter
+        code: |
+            SELECT 
+                ID AS "Code",
+                gene,
+                CHR,
+                band, 
+                seg_start AS "Start",
+                seg_end AS "End",
+                Positions AS "Positions;<quick visible='true' />",
+                status,
+                ICD10 AS "Patient's diagnosis code;<quick visible='true' />",
+                Pathogenicity AS "Pathogenicity;<quick visible='true' />",
+                Newly_discovered AS "Newly_discovered;<quick visible='true' />",
+                ClinVar AS "ClinVar;<quick visible='true' />"
+            FROM cnvs
+            ORDER BY CHR
+#    - Card:
+ #       layout: '{"tableBox":"gene", "mode":"named", "hideTitle":"true"}'
+ #       invisible: true
+  #      roles: "@AllRoles"
+  #      code: |-
+  #          SELECT
+  #              ID AS "ID"
+  #          FROM genes
+
+ #   - Info:
+  #      roles: "@AllRoles"
+  #      layout: '{"tableBox":"geneInfo", "mode":"named", "filterUI":"no", "hideTitle":"true"}'
+  #      invisible: true
+  #      code: |-
+  #          SELECT
+   #             name
+   #         FROM genes

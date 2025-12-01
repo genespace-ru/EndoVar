@@ -5,7 +5,7 @@ genes:
   primaryKey: ID
   scheme:
     columns:
-    - gene_ID:
+    - ID:
         type: KEYTYPE
         autoIncrement: true
         primaryKey: true
@@ -60,7 +60,10 @@ genes:
     - All records:
         type: 1D
         roles: '@AllRoles'
+        #layout: '{"topForm":"TopFilter", "quickType":"select"}'
         layout: '{"quickType":"select"}'
+        #operations:
+        #- TopFilter
         code: |
             SELECT 
                 HGNC AS "HGNC",
@@ -81,7 +84,7 @@ genes:
         roles: "@AllRoles"
         code: |-
             SELECT
-                gene_ID AS "___ID"
+                ID AS "ID"
             FROM genes
 
     - Info:
@@ -92,3 +95,9 @@ genes:
             SELECT
                 name
             FROM genes
+
+#  operations:
+#  - TopFilter:
+#      type: Groovy
+ #     roles: '@AllRoles'
+ #     file: operations.filters.NameFilter.groovy

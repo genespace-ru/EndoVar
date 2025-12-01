@@ -16,9 +16,12 @@ EndoVar:
   application:
   - _welcome_
   - genes
+  - cnvs
+  - snvs
+
   scripts:
   - Post-db
   - dictionaries
   - genes
-
-
+  - cnvs
+  - snvs

@@ -1,5 +1,5 @@
 DELETE FROM genes;
-ALTER SEQUENCE genes_gene_id_seq RESTART WITH 1;
+ALTER SEQUENCE genes_id_seq RESTART WITH 1;
 
 <#macro GENE g>
     INSERT INTO genes(HGNC, name, summary, ensembl_gene_id, refseq_accession,uniprot_ids,omim_id, orphanet, mane_select)
