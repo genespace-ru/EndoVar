@@ -60,10 +60,9 @@ genes:
     - All records:
         type: 1D
         roles: '@AllRoles'
-        #layout: '{"topForm":"TopFilter", "quickType":"select"}'
-        layout: '{"quickType":"select"}'
-        #operations:
-        #- TopFilter
+        layout: '{"topForm":"GeneFilter", "quickType":"select"}'
+        operations:
+        - GeneFilter
         code: |
             SELECT 
                 HGNC AS "HGNC",
@@ -76,8 +75,13 @@ genes:
                 omim_id AS "OMIM ID;<quick visible='true' />",
                 orphanet AS "Orphanet;<quick visible='true' />", 
                 mane_select AS "MANE_SELECT;<quick visible='true' />"
-            FROM genes
+            FROM genes g
+            WHERE (1=1)
+            <if parameter="HGNC">
+              AND g.HGNC LIKE '<parameter:HGNC/>%'
+            </if>
             ORDER BY HGNC
+
     - Card:
         layout: '{"tableBox":"gene", "mode":"named", "hideTitle":"true"}'
         invisible: true
@@ -96,8 +100,9 @@ genes:
                 name
             FROM genes
 
-#  operations:
-#  - TopFilter:
-#      type: Groovy
- #     roles: '@AllRoles'
- #     file: operations.filters.NameFilter.groovy
+  operations:
+  - GeneFilter:
+      type: Groovy
+      roles: '@AllRoles'
+      file: operations.filters.GeneFilter.groovy
+

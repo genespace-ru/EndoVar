@@ -97,7 +97,9 @@ snvs:
     - All records:
         type: 1D
         roles: '@AllRoles'
-        layout: '{"quickType":"select"}'
+        layout: '{"topForm":"SNVFilter", "quickType":"select"}'
+        operations:
+        - SNVFilter
         code: |
             SELECT 
                 ID AS "Code",
@@ -120,3 +122,9 @@ snvs:
                 BDl AS "BayesDel;<quick visible='true' />",
                 CD AS "CADD;<quick visible='true' />"
             FROM snvs
+
+  operations:
+  - SNVFilter:
+      type: Groovy
+      roles: '@AllRoles'
+      file: operations.filters.SNVFilter.groovy
