@@ -101,8 +101,7 @@ snvs:
         operations:
         - SNVFilter
         code: |
-            SELECT 
-                ID AS "Code",
+            SELECT
                 V AS "Variant;<quick visible='true' />",
                 C AS "CHR",
                 P AS "Position",
@@ -122,6 +121,10 @@ snvs:
                 BDl AS "BayesDel;<quick visible='true' />",
                 CD AS "CADD;<quick visible='true' />"
             FROM snvs
+            WHERE (1=1)
+            <if parameter="Variant">
+              AND V = '<parameter:Variant/>'
+            </if>          
 
   operations:
   - SNVFilter:

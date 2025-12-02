@@ -11,6 +11,7 @@ class SNVFilter extends FilterOperation
         def dps = new GDynamicPropertySetSupport()
         
         dps.gene = [ DISPLAY_NAME: "Gene", TYPE: String ]
+        dps.Variant = [ DISPLAY_NAME: "Variant name", TYPE: String ]
         return dps
     }
 }

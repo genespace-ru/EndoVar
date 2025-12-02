@@ -48,6 +48,18 @@ cnvs:
 
   queries:
 
+    - '*** Selection view ***':
+        type: 1D
+        roles: '@AllRoles'
+        code: |
+            SELECT 
+                ID,
+                gene,
+                status,
+                seg_start,
+                band
+            FROM cnvs 
+
     - ChromosomeSelectionView:
         type: 1D_unknown
         code: |-
@@ -66,8 +78,8 @@ cnvs:
         - CNVFilter
         code: |
             SELECT 
-                ID AS "Code",
                 gene,
+                '<link table="cnvs" queryName="Card" using="___ID" columns="ID" />' AS ";gene",
                 CHR,
                 band, 
                 seg_start AS "Start",
@@ -88,7 +100,29 @@ cnvs:
             </if>
 
             ORDER BY CHR
+    - Card:
+        layout: '{"tableBox":"cnv", "mode":"named", "hideTitle":"true"}'
+        invisible: true
+        roles: "@AllRoles"
+        code: |-
+            SELECT
+                ID AS "ID"
+            FROM cnvs
 
+    - Info:
+        roles: "@AllRoles"
+        layout: '{"tableBox":"cnvInfo", "mode":"named", "filterUI":"no", "hideTitle":"true"}'
+        invisible: true
+        code: |-
+            SELECT
+                gene,
+                Positions AS "P",
+                ICD10 AS "I",
+                Newly_discovered AS "Ne",
+                Pathogenicity AS "Pathogenicity",
+                status,
+                band
+            FROM cnvs
 #    - Card:
  #       layout: '{"tableBox":"gene", "mode":"named", "hideTitle":"true"}'
  #       invisible: true
