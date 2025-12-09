@@ -18,10 +18,11 @@ EndoVar:
   - genes
   - cnvs
   - snvs
-
+  - cnvsall
   scripts:
   - Post-db
   - dictionaries
   - genes
   - cnvs
   - snvs
+  - cnvsall
