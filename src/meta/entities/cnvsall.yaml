@@ -75,23 +75,21 @@ cnvsall:
                 seg_start
             FROM cnvsall 
 
-    #- ChromosomeSelectionView:
-     #   type: 1D_unknown
-      #  code: |-
-      ##    SELECT 
-       #     chr,
-      #      chr
-       #   FROM CNVs
-      #    GROUP BY chr
-      #    ORDER BY chr
+    - PathogenicitySelectionView:
+        type: 1D_unknown
+        code: |-
+          SELECT 
+            pat_status
+          FROM cnvsall
+          GROUP BY pat_status
 
     - All records:
         type: 1D
         roles: '@AllRoles'
-      #  layout: '{"topForm":"CNVFilter", "quickType":"select"}'
-        layout: '{"quickType":"select"}'
-      #  operations:
-      #  - CNVFilter
+        layout: '{"topForm":"CNVALLFilter", "quickType":"select"}'
+       # layout: '{"quickType":"select"}'
+        operations:
+        - CNVALLFilter
         code: |
             SELECT 
                 pat_gene,
@@ -109,13 +107,13 @@ cnvsall:
                 clinvar_cnvs_phenotypes AS "dbVar associated phenotype;<quick visible='true' />",
                 clinvar_cnvs_clin_int AS "Clinical interpretation;<quick visible='true' />"
             FROM cnvsall
-         #   WHERE (1=1)
-         #   <if parameter="gene">
-          #      AND gene = '<parameter:gene/>'
-         #   </if>
-         #   <if parameter="chr">
-         #       AND chr = '<parameter:chr/>'
-          #  </if>
+            WHERE (1=1)
+            <if parameter="gene">
+                AND Genes LIKE '%<parameter:gene/>%'
+            </if>
+            <if parameter="pat_status">
+                AND pat_status = '<parameter:pat_status/>'
+            </if>
 
            # ORDER BY CHR
   #  - Card:
@@ -159,8 +157,8 @@ cnvsall:
    #             name
    #         FROM genes
 
-#  operations:
- # - CNVFilter:
-  #    type: Groovy
-   #   roles: '@AllRoles'
-   #   file: operations.filters.CNVFilter.groovy
+  operations:
+  - CNVALLFilter:
+      type: Groovy
+      roles: '@AllRoles'
+      file: operations.filters.CNVALLFilter.groovy
