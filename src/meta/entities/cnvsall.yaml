@@ -10,18 +10,12 @@ cnvsall:
         autoIncrement: true
         primaryKey: true
         doc: CNV internal identifier.
-    - gene:
-        type: VARCHAR(20)
-        doc: Genes affected by variation
     - status:
         type: VARCHAR(20)
         doc: Copy number loss/ Copy number gain
     - Chrom:
         type: VARCHAR(20)
         doc: Chromosome number
-    - band:
-        type: VARCHAR(20)
-        doc: band
     - seq_start:
         type: VARCHAR(20)
         doc: start of CNV
@@ -29,39 +23,35 @@ cnvsall:
         type: VARCHAR(20)
         doc: end of CNV
     - Positions:
-        type: VARCHAR(30)
+        type: VARCHAR(60)
         doc: coordinates of CNV
     - diagnosis:
         type: VARCHAR(20)
         doc: ICD10 code of patient' diagnosis
-    - Pathogenicity:
-        type: VARCHAR(50)
-        canBeNull: true
-        doc: interpretation of the pathogenicity score
     - Newly_discovered:
         type: VARCHAR(20)
         doc: is CNV are previously reported in Clinvar?
     - clinvar_cnvs_ids:
-        type: VARCHAR(1000)
+        type: VARCHAR(10000)
         canBeNull: true
         doc: Variant Call ID in dbVAR
     - clinvar_cnvs_phenotypes:
-        type: VARCHAR(1000)
+        type: VARCHAR(10000)
         canBeNull: true
         doc: Subject phenotype
     - clinvar_cnvs_type:
-        type: VARCHAR(1000)
+        type: VARCHAR(10000)
         canBeNull: true
         doc: variant type
     - clinvar_cnvs_clin_int:
-        type: VARCHAR(1000)
+        type: VARCHAR(10000)
         canBeNull: true
         doc: Clinical interpretation of the copy-number variant by submitters       
     - pat_score:
         type: VARCHAR(100)
         doc: computed score    
     - pat_status:
-        type: VARCHAR(1000)
+        type: VARCHAR(10000)
         doc: Interpretation of pathogenicity score      
     - pat_gene:
         type: VARCHAR(1000)
@@ -69,9 +59,9 @@ cnvsall:
     - samp_id:
         type: VARCHAR(50)
         doc: Patient ID   
-    - genes:
-        type: VARCHAR(2000)  
-        doc: list of genes involved in CNV
+    - Genes:
+        type: VARCHAR(10000)  
+        doc: list of genes involved in CNV and affected by variation
 
   queries:
 
@@ -80,7 +70,6 @@ cnvsall:
         roles: '@AllRoles'
         code: |
             SELECT 
-                ID,
                 pat_gene,
                 status,
                 seg_start
@@ -118,7 +107,7 @@ cnvsall:
                 clinvar_cnvs_ids AS "dbVar Variant Call ID;<quick visible='true' />",
                 clinvar_cnvs_type AS "dbVar CNV type;<quick visible='true' />",
                 clinvar_cnvs_phenotypes AS "dbVar associated phenotype;<quick visible='true' />",
-                clinvar_cnvs_clin_int AS "Clinical interpretation;<quick visible='true' />",
+                clinvar_cnvs_clin_int AS "Clinical interpretation;<quick visible='true' />"
             FROM cnvsall
          #   WHERE (1=1)
          #   <if parameter="gene">
