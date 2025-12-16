@@ -1,0 +1,182 @@
+cnvsallupdated:
+  type: table
+  displayName: ALL CNV NEW
+  order: '100'
+  primaryKey: ID
+  scheme:                                 
+    columns:
+    - ID:
+        type: KEYTYPE
+        autoIncrement: true
+        primaryKey: true
+        doc: CNV internal identifier.
+    - status:
+        type: VARCHAR(20)
+        doc: Copy number loss/ Copy number gain
+    - Chrom:
+        type: VARCHAR(20)
+        doc: Chromosome number
+    - seq_start:
+        type: VARCHAR(20)
+        doc: start of CNV
+    - seq_end:
+        type: VARCHAR(20)
+        doc: end of CNV
+    - Positions:
+        type: VARCHAR(60)
+        doc: coordinates of CNV
+    - diagnosis:
+        type: VARCHAR(20)
+        doc: ICD10 code of patient' diagnosis
+    - Newly_discovered:
+        type: VARCHAR(20)
+        doc: is CNV are previously reported in Clinvar?
+    - clinvar_cnvs_ids:
+        type: VARCHAR(10000)
+        canBeNull: true
+        doc: Variant Call ID in dbVAR
+    - clinvar_cnvs_phenotypes:
+        type: VARCHAR(10000)
+        canBeNull: true
+        doc: Subject phenotype
+    - clinvar_cnvs_type:
+        type: VARCHAR(10000)
+        canBeNull: true
+        doc: variant type
+    - clinvar_cnvs_clin_int:
+        type: VARCHAR(10000)
+        canBeNull: true
+        doc: Clinical interpretation of the copy-number variant by submitters       
+    - pat_score:
+        type: VARCHAR(100)
+        doc: computed score    
+    - pat_status:
+        type: VARCHAR(10000)
+        doc: Interpretation of pathogenicity score      
+    - pat_gene:
+        type: VARCHAR(1000)
+        doc: Gene with maximum pathogenicity            
+    - samp_id:
+        type: VARCHAR(50)
+        doc: Patient ID   
+    - Genes:
+        type: VARCHAR(10000)  
+        doc: list of genes involved in CNV and affected by variation
+    - full_name_diagnosis:
+        type: VARCHAR(10000)  
+        doc: full name of patient diagnosis 
+    - patients_qty_with_CNV:
+        type: INT  
+        doc: quantity of patients with CNV 
+    - patients_diagnosis:
+        type: VARCHAR(10000)  
+        doc: full names of patient diagnosis 
+    - ICD10_patients_diagnosis:
+        type: VARCHAR(10000)  
+        doc: ICD10 codes of patient diagnosis                    
+
+  queries:
+
+    - '*** Selection view ***':
+        type: 1D
+        roles: '@AllRoles'
+        code: |
+            SELECT 
+                pat_gene,
+                status,
+                seg_start
+            FROM cnvsallupdated 
+
+    - PathogenicitySelectionView:
+        type: 1D_unknown
+        code: |-
+          SELECT 
+            pat_status
+          GROUP BY pat_status
+
+    - All records:
+        type: 1D
+        roles: '@AllRoles'
+        layout: '{"topForm":"CNVALLupdatedFilter", "quickType":"select"}'
+        #layout: '{"quickType":"select"}'
+        operations:
+        - CNVALLupdatedFilter
+        code: |
+            SELECT 
+                pat_gene,
+                Genes AS "All genes;<quick visible='true' />",
+                Chrom AS "Chr",
+                seq_start AS "Start",
+                seq_end AS "End",
+                Positions AS "Positions;<quick visible='true' />",
+                status,
+                diagnosis AS "Patient's diagnosis code;<quick visible='true' />",
+                full_name_diagnosis AS "Full name diagnosis;<quick visible='true' />",
+                pat_status AS "Pathogenicity;<quick visible='true' />",
+                Newly_discovered AS "Newly_discovered;<quick visible='true' />",
+                clinvar_cnvs_ids AS "dbVar Variant Call ID;<quick visible='true' />",
+                clinvar_cnvs_type AS "dbVar CNV type;<quick visible='true' />",
+                clinvar_cnvs_phenotypes AS "dbVar associated phenotype;<quick visible='true' />",
+                clinvar_cnvs_clin_int AS "Clinical interpretation;<quick visible='true' />",
+                patients_qty_with_CNV AS "Quantity of patients with CNV;<quick visible='true' />",
+                patients_diagnosis AS "Patient's diagnosis;<quick visible='true' />",
+                ICD10_patients_diagnosis AS "ICD10 codes of diagnosis;<quick visible='true' />"
+            FROM cnvsallupdated
+            WHERE (1=1)
+            <if parameter="gene">
+                AND Genes LIKE '%<parameter:gene/>%'
+            </if>
+            <if parameter="pat_status">
+                AND pat_status = '<parameter:pat_status/>'
+            </if>
+            <if parameter="Diagnosis">
+                AND patients_diagnosis LIKE '%<parameter:Diagnosis/>%'
+            </if>
+
+            ORDER BY patients_qty_with_CNV DESC
+  #  - Card:
+   #     layout: '{"tableBox":"cnv", "mode":"named", "hideTitle":"true"}'
+   #     invisible: true
+   #     roles: "@AllRoles"
+   #     code: |-
+   #         SELECT
+    #            ID AS "ID"
+    #        FROM cnvs
+
+  #  - Info:
+  #      roles: "@AllRoles"
+   #     layout: '{"tableBox":"cnvInfo", "mode":"named", "filterUI":"no", "hideTitle":"true"}'
+   ##     invisible: true
+  #      code: |-
+   #         SELECT
+   #             gene,
+   #             Positions AS "P",
+   #             ICD10 AS "I",
+  #              Newly_discovered AS "Ne",
+   #             Pathogenicity AS "Pathogenicity",
+   #             status,
+    #            band
+    #        FROM cnvs
+#    - Card:
+ #       layout: '{"tableBox":"gene", "mode":"named", "hideTitle":"true"}'
+ #       invisible: true
+  #      roles: "@AllRoles"
+  #      code: |-
+  #          SELECT
+  #              ID AS "ID"
+  #          FROM genes
+
+ #   - Info:
+  #      roles: "@AllRoles"
+  #      layout: '{"tableBox":"geneInfo", "mode":"named", "filterUI":"no", "hideTitle":"true"}'
+  #      invisible: true
+  #      code: |-
+  #          SELECT
+   #             name
+   #         FROM genes
+
+  operations:
+  - CNVALLupdatedFilter:
+      type: Groovy
+      roles: '@AllRoles'
+      file: operations.filters.CNVALLupdatedFilter.groovy
