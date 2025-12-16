@@ -1,7 +1,7 @@
-genes:
+genesupdated:
   type: table
-  displayName: Genes
-  order: '10'
+  displayName: Genes NEW
+  order: '80'
   primaryKey: ID
   scheme:
     columns:
@@ -10,6 +10,9 @@ genes:
         autoIncrement: true
         primaryKey: true
         doc: Gene internal identifier.
+    - ncbi_gene_ID:
+        type: VARCHAR(20)
+        doc: NCBI gene ID
     - HGNC:
         type: VARCHAR(20)
         doc: The HGNC approved gene symbol.
@@ -44,7 +47,18 @@ genes:
         type: VARCHAR(50)
         canBeNull: true
         doc: NCBI and Ensembl transcript IDs/acessions including the version number for one high-quality representative transcript per protein-coding gene that is well-supported by experimental data and represents the biology of the gene. The IDs are delimited by |.
-
+    - gain_CNV:
+        type: INT
+        doc: patients count with gain_CNV with gene   
+    - loss_CNV:
+        type: INT
+        doc: patients count with loss_CNV with gene 
+    - CNV_qty:
+        type: INT
+        doc: all patients count with CNV with gene 
+    - CNV_patients_diagnosis:
+        type: VARCHAR(10000)
+        doc: list of patients diagnosis
   queries:
 
     - '*** Selection view ***':
@@ -54,19 +68,17 @@ genes:
             SELECT 
                 ID AS "Code",
                 HGNC AS "Name"
-            FROM genes
-            ORDER BY HGNC
+            FROM genesupdated
 
     - All records:
         type: 1D
         roles: '@AllRoles'
-        layout: '{"topForm":"GeneFilter", "quickType":"select"}'
+        layout: '{"topForm":"GeneNEWFilter", "quickType":"select"}'
         operations:
-        - GeneFilter
+        - GeneNEWFilter
         code: |
             SELECT 
                 HGNC AS "HGNC",
-                '<link table="genes" queryName="Card" using="___ID" columns="ID" />' AS ";HGNC",
                 name, 
                 summary AS "summary;<quick visible='true' />",
                 ensembl_gene_id AS "Ensembl ID;<quick visible='true' />",
@@ -74,35 +86,41 @@ genes:
                 uniprot_ids AS "Uniprot;<quick visible='true' />",
                 omim_id AS "OMIM ID;<quick visible='true' />",
                 orphanet AS "Orphanet;<quick visible='true' />", 
-                mane_select AS "MANE_SELECT;<quick visible='true' />"
-            FROM genes g
+                mane_select AS "MANE_SELECT;<quick visible='true' />",
+                gain_CNV AS "gain_CNV;<quick visible='true' />",
+                loss_CNV AS "loss_CNV;<quick visible='true' />",
+                CNV_qty AS "CNV_qty;<quick visible='true' />",
+                CNV_patients_diagnosis AS "CNV_patient_diagnosis;<quick visible='true' />"
+
+            FROM genesupdated gup
             WHERE (1=1)
             <if parameter="HGNC">
-              AND g.HGNC LIKE '<parameter:HGNC/>%'
+              AND gup.HGNC LIKE '<parameter:HGNC/>%'
             </if>
+            <if parameter="Diagnosis">
+              AND gup.CNV_patients_diagnosis LIKE '%<parameter:Diagnosis/>%'
+            </if> 
             ORDER BY HGNC
 
-    - Card:
-        layout: '{"tableBox":"gene", "mode":"named", "hideTitle":"true"}'
-        invisible: true
-        roles: "@AllRoles"
-        code: |-
-            SELECT
-                ID AS "ID"
-            FROM genes
+#    - Card:
+ #       layout: '{"tableBox":"gene", "mode":"named", "hideTitle":"true"}'
+ #       invisible: true
+  #      roles: "@AllRoles"
+  #      code: |-
+  #          SELECT
+  #              ID AS "ID"
+  #          FROM genes
 
-    - Info:
-        roles: "@AllRoles"
-        layout: '{"tableBox":"geneInfo", "mode":"named", "filterUI":"no", "hideTitle":"true"}'
-        invisible: true
-        code: |-
-            SELECT
-                name
-            FROM genes
+ #   - Info:
+ #       roles: "@AllRoles"
+ #       layout: '{"tableBox":"geneInfo", "mode":"named", "filterUI":"no", "hideTitle":"true"}'
+  #          SELECT
+  #              name
+   #         FROM genes
 
   operations:
-  - GeneFilter:
+  - GeneNEWFilter:
       type: Groovy
       roles: '@AllRoles'
-      file: operations.filters.GeneFilter.groovy
+      file: operations.filters.GeneNEWFilter.groovy
 
