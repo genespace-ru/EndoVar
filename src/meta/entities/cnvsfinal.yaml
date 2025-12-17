@@ -105,7 +105,7 @@ cnvsfinal:
                 clinvar_cnvs_phenotypes AS "dbVar associated phenotype;<quick visible='true' />",
                 clinvar_cnvs_clin_int AS "Clinical interpretation;<quick visible='true' />",
                 patients_qty_with_CNV AS "Quantity of patients with CNV;<quick visible='true' />",
-                patients_diagnosis AS "Patient's diagnosis;<quick visible='true' />",
+                patients_diagnosis AS "Patient's diagnosis;<quick visible='true' />;",
                 ICD10_patients_diagnosis AS "ICD10 codes of diagnosis;<quick visible='true' />"
             FROM cnvsfinal
             WHERE (1=1)

@@ -79,6 +79,9 @@ genesupdated:
         code: |
             SELECT 
                 HGNC AS "HGNC",
+                CONCAT('%', HGNC, '%') AS "___HGNC",
+                'Copy number gain' AS "___gain",
+
                 name, 
                 summary AS "summary;<quick visible='true' />",
                 ensembl_gene_id AS "Ensembl ID;<quick visible='true' />",
@@ -87,10 +90,21 @@ genesupdated:
                 omim_id AS "OMIM ID;<quick visible='true' />",
                 orphanet AS "Orphanet;<quick visible='true' />", 
                 mane_select AS "MANE_SELECT;<quick visible='true' />",
-                gain_CNV AS "gain_CNV;<quick visible='true' />",
+
+                gain_CNV AS "gain_CNV_old;<quick visible='true' />",
+                '<sql using="___HGNC,___gain">SELECT count(*) FROM cnvsfinal c 
+                 WHERE genes LIKE ? AND status = ? </sql>'     
+                AS "gain_CNV",
+                '<link table="cnvsfinal" using="HGNC,___gain" columns="Genes,status" />' AS ";gain_CNV",
+
+
                 loss_CNV AS "loss_CNV;<quick visible='true' />",
-                CNV_qty AS "CNV_qty;<quick visible='true' />",
-                '<link table="cnvsallupdated" using="HGNC" columns="ID" />' AS ";CNV_qty",
+
+                CNV_qty AS "CNV_qty_old;<quick visible='true' />",
+                '<sql using="___HGNC">SELECT count(*) FROM cnvsfinal WHERE genes LIKE ? </sql>'     
+                AS "CNV_qty",
+                '<link table="cnvsfinal" using="HGNC" columns="Genes" />' AS ";CNV_qty",
+
                 CNV_patients_diagnosis AS "CNV_patient_diagnosis;<quick visible='true' />"
 
             FROM genesupdated gup
