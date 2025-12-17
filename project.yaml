@@ -21,6 +21,7 @@ EndoVar:
   - cnvsall
   - genesupdated
   - cnvsallupdated
+  - cnvsfinal
   scripts:
   - Post-db
   - dictionaries
@@ -30,3 +31,4 @@ EndoVar:
   - cnvsall
   - genesupdated
   - cnvsallupdated
+  - cnvsfinal

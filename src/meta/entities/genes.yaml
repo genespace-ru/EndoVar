@@ -59,7 +59,7 @@ genes:
 
     - All records:
         type: 1D
-        roles: '@AllRoles'
+        roles: '@Guest'
         layout: '{"topForm":"GeneFilter", "quickType":"select"}'
         operations:
         - GeneFilter

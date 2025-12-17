@@ -1,7 +1,7 @@
-cnvsallupdated:
+cnvsfinal:
   type: table
-  displayName: ALL CNV NEW
-  order: '100'
+  displayName: CNV
+  order: '11'
   primaryKey: ID
   scheme:                                 
     columns:
@@ -25,9 +25,6 @@ cnvsallupdated:
     - Positions:
         type: VARCHAR(60)
         doc: coordinates of CNV
-    - diagnosis:
-        type: VARCHAR(20)
-        doc: ICD10 code of patient' diagnosis
     - Newly_discovered:
         type: VARCHAR(20)
         doc: is CNV are previously reported in Clinvar?
@@ -46,25 +43,16 @@ cnvsallupdated:
     - clinvar_cnvs_clin_int:
         type: VARCHAR(10000)
         canBeNull: true
-        doc: Clinical interpretation of the copy-number variant by submitters       
-    - pat_score:
-        type: VARCHAR(100)
-        doc: computed score    
+        doc: Clinical interpretation of the copy-number variant by submitters          
     - pat_status:
         type: VARCHAR(10000)
         doc: Interpretation of pathogenicity score      
     - pat_gene:
         type: VARCHAR(1000)
         doc: Gene with maximum pathogenicity            
-    - samp_id:
-        type: VARCHAR(50)
-        doc: Patient ID   
     - Genes:
         type: VARCHAR(10000)  
         doc: list of genes involved in CNV and affected by variation
-    - full_name_diagnosis:
-        type: VARCHAR(10000)  
-        doc: full name of patient diagnosis 
     - patients_qty_with_CNV:
         type: INT  
         doc: quantity of patients with CNV 
@@ -82,12 +70,10 @@ cnvsallupdated:
         roles: '@AllRoles'
         code: |
             SELECT 
-                cnvsallupdated.pat_gene AS "___ID",
                 pat_gene,
                 status,
                 Genes AS "Genes"
-            FROM cnvsallupdated WHERE cnvsallupdated.ID = 1
-            GROUP BY pat_gene 
+            FROM cnvsfinal 
 
     - PathogenicitySelectionView:
         type: 1D_unknown
@@ -98,7 +84,7 @@ cnvsallupdated:
 
     - All records:
         type: 1D
-        roles: '@Guest'
+        roles: '@AllRoles'
         layout: '{"topForm":"CNVALLupdatedFilter", "quickType":"select"}'
         #layout: '{"quickType":"select"}'
         operations:
@@ -112,8 +98,6 @@ cnvsallupdated:
                 seq_end AS "End",
                 Positions AS "Positions;<quick visible='true' />",
                 status,
-                diagnosis AS "Patient's diagnosis code;<quick visible='true' />",
-                full_name_diagnosis AS "Full name diagnosis;<quick visible='true' />",
                 pat_status AS "Pathogenicity;<quick visible='true' />",
                 Newly_discovered AS "Newly_discovered;<quick visible='true' />",
                 clinvar_cnvs_ids AS "dbVar Variant Call ID;<quick visible='true' />",
@@ -123,7 +107,7 @@ cnvsallupdated:
                 patients_qty_with_CNV AS "Quantity of patients with CNV;<quick visible='true' />",
                 patients_diagnosis AS "Patient's diagnosis;<quick visible='true' />",
                 ICD10_patients_diagnosis AS "ICD10 codes of diagnosis;<quick visible='true' />"
-            FROM cnvsallupdated
+            FROM cnvsfinal
             WHERE (1=1)
             <if parameter="gene">
                 AND Genes LIKE '%<parameter:gene/>%'

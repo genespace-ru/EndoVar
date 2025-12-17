@@ -85,7 +85,7 @@ cnvsall:
 
     - All records:
         type: 1D
-        roles: '@AllRoles'
+        roles: '@Guest'
         layout: '{"topForm":"CNVALLFilter", "quickType":"select"}'
        # layout: '{"quickType":"select"}'
         operations:

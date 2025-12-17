@@ -1,7 +1,7 @@
 genesupdated:
   type: table
-  displayName: Genes NEW
-  order: '80'
+  displayName: Genes
+  order: '10'
   primaryKey: ID
   scheme:
     columns:
@@ -90,6 +90,7 @@ genesupdated:
                 gain_CNV AS "gain_CNV;<quick visible='true' />",
                 loss_CNV AS "loss_CNV;<quick visible='true' />",
                 CNV_qty AS "CNV_qty;<quick visible='true' />",
+                '<link table="cnvsallupdated" using="HGNC" columns="ID" />' AS ";CNV_qty",
                 CNV_patients_diagnosis AS "CNV_patient_diagnosis;<quick visible='true' />"
 
             FROM genesupdated gup
