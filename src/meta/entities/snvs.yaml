@@ -25,10 +25,6 @@ snvs:
     - A:
         type: VARCHAR(1000)
         doc: Alternative base
-    - G:
-        type: VARCHAR(20)
-        canBeNull: true
-        doc: Gene name
     - Pa:
         type: VARCHAR(50)
         canBeNull: true
@@ -129,7 +125,10 @@ snvs:
             WHERE (1=1)
             <if parameter="Variant">
               AND V LIKE '<parameter:Variant/>%'
-            </if>          
+            </if>  
+            <if parameter="gene">
+              AND t.G = '<parameter:gene/>'
+            </if>        
 
   operations:
   - SNVFilter:

@@ -81,7 +81,7 @@ genesupdated:
                 HGNC AS "HGNC",
                 CONCAT('%', HGNC, '%') AS "___HGNC",
                 'Copy number gain' AS "___gain",
-
+                'Copy number loss' AS "___loss",
                 name, 
                 summary AS "summary;<quick visible='true' />",
                 ensembl_gene_id AS "Ensembl ID;<quick visible='true' />",
@@ -91,23 +91,27 @@ genesupdated:
                 orphanet AS "Orphanet;<quick visible='true' />", 
                 mane_select AS "MANE_SELECT;<quick visible='true' />",
 
-                gain_CNV AS "gain_CNV_old;<quick visible='true' />",
+                '<sql using="___HGNC">SELECT count(*) FROM cnvsfinal WHERE genes LIKE ? </sql>'   
+                AS "CNV All classes;<quick visible='true' />",
+                '<link table="cnvsfinal" using="HGNC" columns="Genes" />' AS ";CNV All classes",
+                CNV_patients_diagnosis AS "CNV_patient_diagnosis;<quick visible='true' />",
+
                 '<sql using="___HGNC,___gain">SELECT count(*) FROM cnvsfinal c 
                  WHERE genes LIKE ? AND status = ? </sql>'     
-                AS "gain_CNV",
-                '<link table="cnvsfinal" using="HGNC,___gain" columns="Genes,status" />' AS ";gain_CNV",
+                AS "CNV Duplications;<quick visible='true' />",
+                '<link table="cnvsfinal" using="HGNC,___gain" columns="Genes,status" />' AS ";CNV Duplications",
 
+                '<sql using="___HGNC,___loss">SELECT count(*) FROM cnvsfinal c 
+                 WHERE genes LIKE ? AND status = ? </sql>'     
+                AS "CNV Deletions;<quick visible='true' />",
+                '<link table="cnvsfinal" using="HGNC,___loss" columns="Genes,status" />' AS ";CNV Deletions",
 
-                loss_CNV AS "loss_CNV;<quick visible='true' />",
-
-                CNV_qty AS "CNV_qty_old;<quick visible='true' />",
-                '<sql using="___HGNC">SELECT count(*) FROM cnvsfinal WHERE genes LIKE ? </sql>'     
-                AS "CNV_qty",
-                '<link table="cnvsfinal" using="HGNC" columns="Genes" />' AS ";CNV_qty",
-
-                CNV_patients_diagnosis AS "CNV_patient_diagnosis;<quick visible='true' />"
-
+                '<sql using="HGNC">SELECT count(*) FROM tiers t 
+                 WHERE t.G = ? </sql>' 
+                AS "SNV;<quick visible='true' />",
+                '<link table="snvs" using="HGNC" columns="gene" />' AS ";SNV"
             FROM genesupdated gup
+
             WHERE (1=1)
             <if parameter="HGNC">
               AND gup.HGNC LIKE '<parameter:HGNC/>%'
