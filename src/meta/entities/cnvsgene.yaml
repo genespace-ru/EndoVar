@@ -1,0 +1,49 @@
+cnvsgene:
+  type: table
+  displayName: CNV_TO_GENE
+  order: '700'
+  primaryKey: ID
+  scheme:
+    columns:
+    - ID:
+        type: KEYTYPE
+        autoIncrement: true
+        primaryKey: true
+        doc: Gene internal identifier.
+    - cnv_chr:
+        type: VARCHAR(20)
+        doc: The HGNC approved gene symbol.
+    - cnv_pos:
+        type: VARCHAR(100)
+        doc: Gene name from HGNC.
+    - cnv_status:
+        type: VARCHAR(1900)
+        doc: extract of gene summary texts for genes that have them
+    - gene:
+        type: VARCHAR(20)
+        doc: Ensembl gene ID
+
+  queries:
+
+    - '*** Selection view ***':
+        type: 1D
+        roles: '@AllRoles'
+        code: |
+            SELECT 
+                ID AS "Code"
+            FROM cnvsgenegenes
+
+    - All records:
+        type: 1D
+        roles: '@AllRoles'
+        #layout: '{"topForm":"GeneFilter", "quickType":"select"}'
+        #operations:
+        #- GeneFilter
+        code: |
+            SELECT 
+                cnv_chr,
+                cnv_pos, 
+                cnv_status,
+                gene
+            FROM cnvsgene
+

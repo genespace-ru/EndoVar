@@ -102,25 +102,30 @@ snvs:
         - SNVFilter
         code: |
             SELECT
-                V AS "Variant;<quick visible='true' />",
-                C AS "CHR",
-                P AS "Position",
-                R AS "REF",
-                A AS "ALT",
-                G AS "Gene",
-                Pa AS "Pathogenicity;<quick visible='true' />",
-                GAF AS "GNOMAD3_AF;<quick visible='true' />",
-                Glt AS "GNOMAD3_nhomalt;<quick visible='true' />",
-                Rq AS "RUSeq;<quick visible='true' />",
-                CID AS "ClinVar_ID;<quick visible='true' />",
-                Cif AS "ClinVar_significance;<quick visible='true' />",
-                OM AS "OMIM_ID;<quick visible='true' />",
-                VCT AS "VEP_IMPACT;<quick visible='true' />",
-                SAI AS "SPLICE_AI;<quick visible='true' />",
-                MVM AS "Meta_SVM;<quick visible='true' />",
-                BDl AS "BayesDel;<quick visible='true' />",
-                CD AS "CADD;<quick visible='true' />"
-            FROM snvs
+                s.V AS "Variant;<quick visible='true' />",
+                s.C AS "CHR",
+                s.P AS "Position",
+                s.R AS "REF",
+                s.A AS "ALT",
+                t.G AS "Gene",
+                t.VCT AS "VEP_IMPACT;<quick visible='true' />",
+                t.VC AS "VEP_consequence;<quick visible='true' />",
+                t.Exon AS "Exon;<quick visible='true' />",
+                t.aac AS "Aminoacid change;<quick visible='true' />",
+                t.cdnac AS "cDNA change;<quick visible='true' />",
+                t.Pa AS "Pathogenicity;<quick visible='true' />",
+                t.GAF AS "GNOMAD3_AF;<quick visible='true' />",
+                t.Glt AS "GNOMAD3_nhomalt;<quick visible='true' />",
+                s.Rq AS "RUSeq;<quick visible='true' />",
+                s.CID AS "ClinVar_ID;<quick visible='true' />",
+                s.Cif AS "ClinVar_significance;<quick visible='true' />",
+                t.OMphe AS "OMIM_phenotype;<quick visible='true' />",
+                t.SAI AS "SPLICE_AI;<quick visible='true' />",
+                t.MVM AS "Meta_SVM;<quick visible='true' />",
+                t.BDl AS "BayesDel;<quick visible='true' />",
+                t.CD AS "CADD;<quick visible='true' />"
+            FROM snvs s
+            LEFT JOIN tiers t ON t.V = s.V
             WHERE (1=1)
             <if parameter="Variant">
               AND V LIKE '<parameter:Variant/>%'

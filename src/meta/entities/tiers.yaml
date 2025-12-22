@@ -1,0 +1,121 @@
+tiers:
+  type: table
+  displayName: SNV tiers
+  order: '300'
+  primaryKey: ID
+  scheme:
+    columns:
+    - ID:
+        type: KEYTYPE
+        autoIncrement: true
+        primaryKey: true
+        doc: SNV internal identifier.
+    - V:
+        type: VARCHAR(1000)
+        doc: Variant
+    - C:
+        type: VARCHAR(100)
+        doc: Chromosome number
+    - R:
+        type: VARCHAR(1000)
+        doc: Reference base
+    - A:
+        type: VARCHAR(1000)
+        doc: Alternative base
+    - G:
+        type: VARCHAR(20)
+        doc: Gene name
+    - Pa:
+        type: VARCHAR(50)
+        canBeNull: true
+        doc: Algorithmically predicted pathogenicity level
+    - GAF:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: gnomAD allele frequency
+    - Glt:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: gnomaAD number of homozygotes 
+    - VCT:
+        type: VARCHAR(200)
+        doc: Variant impact on protein  
+    - VC:
+        type: VARCHAR(500)
+        doc: VEP consequence            
+    - SAI:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: Predicted effect on splicing by SpliceAI tool
+    - MVM:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: MetaSVM prediction
+    - BDl:
+        type: VARCHAR(200)
+        canBeNull: true
+        doc: BayesDel prediction
+    - CD:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: CADD_phred score
+    - startpos:
+        type: VARCHAR(20)
+        doc: start of SNV       
+    - Exon:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: Exon number        
+    - OMphe:
+        type: VARCHAR(2000)
+        canBeNull: true
+        doc: OMIM_phenotype     
+    - aac:
+        type: VARCHAR(500)
+        canBeNull: true
+        doc: aminoacid change
+    - cdnac:
+        type: VARCHAR(1000)
+        canBeNull: true
+        doc: cDNA change
+
+  queries:
+
+    - '*** Selection view ***':
+        type: 1D
+        roles: '@Guest'
+        code: |
+            SELECT 
+                ID AS "Code",
+                C AS "CHR",
+                R AS "REF",
+                A AS "ALT",
+                G AS "Gene"
+            FROM tiers
+
+    - All records:
+        type: 1D
+        roles: '@Guest'
+        code: |
+            SELECT
+                V AS "Variant",
+                C AS "CHR",
+                startpos AS "Start",
+                R AS "REF",
+                A AS "ALT",
+                G AS "Gene",
+                Exon AS "Exon",
+                aac AS "Aminoacid change",
+                cdnac AS "cDNA change",
+                Pa AS "Pathogenicity",
+                GAF AS "GNOMAD3_AF",
+                Glt AS "GNOMAD3_nhomalt",
+                OMphe AS "OMIM_phenotype",
+                VCT AS "VEP_IMPACT",
+                VC AS "VEP_consequence"
+                SAI AS "SPLICE_AI",
+                MVM AS "Meta_SVM",
+                BDl AS "BayesDel",
+                CD AS "CADD"
+            FROM tiers        
+
