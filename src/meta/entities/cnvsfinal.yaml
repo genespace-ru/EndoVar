@@ -72,6 +72,7 @@ cnvsfinal:
             SELECT 
                 pat_gene,
                 status,
+                pat_status,
                 Genes AS "Genes"
             FROM cnvsfinal 
 
@@ -80,7 +81,16 @@ cnvsfinal:
         code: |-
           SELECT 
             pat_status
+          FROM cnvsfinal
           GROUP BY pat_status
+
+    - StatusSelectionView:
+        type: 1D_unknown
+        code: |-
+          SELECT 
+            status
+          FROM cnvsfinal
+          GROUP BY status
 
     - All records:
         type: 1D
@@ -97,7 +107,7 @@ cnvsfinal:
                 seq_start AS "Start",
                 seq_end AS "End",
                 Positions AS "Positions;<quick visible='true' />",
-                status,
+                status AS "Class",
                 pat_status AS "Pathogenicity;<quick visible='true' />",
                 Newly_discovered AS "Newly_discovered;<quick visible='true' />",
                 clinvar_cnvs_ids AS "dbVar Variant Call ID;<quick visible='true' />",
@@ -118,7 +128,9 @@ cnvsfinal:
             <if parameter="Diagnosis">
                 AND patients_diagnosis LIKE '%<parameter:Diagnosis/>%'
             </if>
-
+            <if parameter="status">
+                AND status = '<parameter:status/>'
+            </if>
             ORDER BY patients_qty_with_CNV DESC
   #  - Card:
    #     layout: '{"tableBox":"cnv", "mode":"named", "hideTitle":"true"}'

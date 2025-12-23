@@ -29,9 +29,8 @@ tiers:
         type: VARCHAR(20)
         canBeNull: true
         doc: Gene name
-    - Pa:
-        type: INT
-        canBeNull: true
+    - pa:
+        type: VARCHAR(20)
         doc: Algorithmically predicted pathogenicity level
     - GAF:
         type: VARCHAR(20)
@@ -95,12 +94,15 @@ tiers:
         roles: '@AllRoles'
         code: |
             SELECT 
-                ID AS "Code",
-                C AS "CHR",
-                R AS "REF",
-                A AS "ALT",
-                G AS "Gene"
+                pa
             FROM tiers
+    - PathogenicitySelectionView:
+        type: 1D_unknown
+        code: |-
+          SELECT 
+            pa
+          FROM tiers
+          GROUP BY pa
 
     - All records:
         type: 1D
@@ -122,7 +124,7 @@ tiers:
                 cdnac AS "cDNA change;<quick visible='true' />",
                 VCT AS "VEP_IMPACT;<quick visible='true' />",
                 VC AS "VEP_consequence;<quick visible='true' />",               
-                Pa AS "Pathogenicity",
+                pa AS "Pathogenicity",
                 GAF AS "GNOMAD3_AF;<quick visible='true' />",
                 Glt AS "GNOMAD3_nhomalt;<quick visible='true' />",
                 OMphe AS "OMIM_phenotype;<quick visible='true' />",
@@ -137,8 +139,11 @@ tiers:
             </if>  
             <if parameter="gene">
               AND G = '<parameter:gene/>'
-            </if>  
-            ORDER BY Pa
+            </if>       
+            <if parameter="pa">
+              AND pa = <parameter:pa/>
+            </if>                              
+            ORDER BY pa
             
   operations:
   - SNVFilter:

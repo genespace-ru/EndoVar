@@ -12,8 +12,11 @@ class CNVALLupdatedFilter extends FilterOperation
         
         dps.gene = [ DISPLAY_NAME: "Involved gene", TYPE: String ]
         dps.pat_status  = [ DISPLAY_NAME: "Pathogenicity", TYPE: String,
-                     TAG_LIST_ATTR: queries.getTagsFromCustomSelectionView("cnvsall", "PathogenicitySelectionView"),
+                     TAG_LIST_ATTR: queries.getTagsFromCustomSelectionView("cnvsfinal", "PathogenicitySelectionView"),
                      RELOAD_ON_CHANGE: true ]
+        dps.status  = [ DISPLAY_NAME: "CNV class", TYPE: String,
+                     TAG_LIST_ATTR: queries.getTagsFromCustomSelectionView("cnvsfinal", "StatusSelectionView"),
+                     RELOAD_ON_CHANGE: true ]                     
         dps.Diagnosis = [ DISPLAY_NAME: "Patient diagnosis", TYPE: String ]
 
         return dps
