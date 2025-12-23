@@ -1,7 +1,7 @@
 tiers:
   type: table
-  displayName: SNV tiers
-  order: '300'
+  displayName: SNV
+  order: '32'
   primaryKey: ID
   scheme:
     columns:
@@ -22,11 +22,15 @@ tiers:
     - A:
         type: VARCHAR(1000)
         doc: Alternative base
+    - P:
+        type: VARCHAR(100)
+        doc: SNV position
     - G:
         type: VARCHAR(20)
+        canBeNull: true
         doc: Gene name
     - Pa:
-        type: VARCHAR(50)
+        type: INT
         canBeNull: true
         doc: Algorithmically predicted pathogenicity level
     - GAF:
@@ -39,9 +43,11 @@ tiers:
         doc: gnomaAD number of homozygotes 
     - VCT:
         type: VARCHAR(200)
+        canBeNull: true
         doc: Variant impact on protein  
     - VC:
         type: VARCHAR(500)
+        canBeNull: true
         doc: VEP consequence            
     - SAI:
         type: VARCHAR(20)
@@ -58,10 +64,7 @@ tiers:
     - CD:
         type: VARCHAR(20)
         canBeNull: true
-        doc: CADD_phred score
-    - startpos:
-        type: VARCHAR(20)
-        doc: start of SNV       
+        doc: CADD_phred score     
     - Exon:
         type: VARCHAR(20)
         canBeNull: true
@@ -69,7 +72,11 @@ tiers:
     - OMphe:
         type: VARCHAR(2000)
         canBeNull: true
-        doc: OMIM_phenotype     
+        doc: OMIM_phenotype  
+    - HGVSp:
+        type: VARCHAR(500)
+        canBeNull: true
+        doc: protein
     - aac:
         type: VARCHAR(500)
         canBeNull: true
@@ -79,11 +86,13 @@ tiers:
         canBeNull: true
         doc: cDNA change
 
+
+
   queries:
 
     - '*** Selection view ***':
         type: 1D
-        roles: '@Guest'
+        roles: '@AllRoles'
         code: |
             SELECT 
                 ID AS "Code",
@@ -95,27 +104,44 @@ tiers:
 
     - All records:
         type: 1D
-        roles: '@Guest'
+        roles: '@AllRoles'
+        layout: '{"topForm":"SNVFilter", "quickType":"select"}'  
+        operations:
+        - SNVFilter      
         code: |
             SELECT
                 V AS "Variant",
                 C AS "CHR",
-                startpos AS "Start",
+                P AS "Position",
                 R AS "REF",
                 A AS "ALT",
-                G AS "Gene",
-                Exon AS "Exon",
-                aac AS "Aminoacid change",
-                cdnac AS "cDNA change",
+                G AS "Gene;<quick visible='true' />",
+                Exon AS "Exon;<quick visible='true' />",
+                HGVSp AS "HGVSp;<quick visible='true' />",
+                aac AS "Aminoacid change;<quick visible='true' />",
+                cdnac AS "cDNA change;<quick visible='true' />",
+                VCT AS "VEP_IMPACT;<quick visible='true' />",
+                VC AS "VEP_consequence;<quick visible='true' />",               
                 Pa AS "Pathogenicity",
-                GAF AS "GNOMAD3_AF",
-                Glt AS "GNOMAD3_nhomalt",
-                OMphe AS "OMIM_phenotype",
-                VCT AS "VEP_IMPACT",
-                VC AS "VEP_consequence"
-                SAI AS "SPLICE_AI",
-                MVM AS "Meta_SVM",
-                BDl AS "BayesDel",
-                CD AS "CADD"
-            FROM tiers        
-
+                GAF AS "GNOMAD3_AF;<quick visible='true' />",
+                Glt AS "GNOMAD3_nhomalt;<quick visible='true' />",
+                OMphe AS "OMIM_phenotype;<quick visible='true' />",
+                SAI AS "SPLICE_AI;<quick visible='true' />",
+                MVM AS "Meta_SVM;<quick visible='true' />",
+                BDl AS "BayesDel;<quick visible='true' />",
+                CD AS "CADD;<quick visible='true' />"
+            FROM tiers    
+            WHERE (1=1)
+            <if parameter="Variant">
+              AND V LIKE '<parameter:Variant/>%'
+            </if>  
+            <if parameter="gene">
+              AND G = '<parameter:gene/>'
+            </if>  
+            ORDER BY Pa
+            
+  operations:
+  - SNVFilter:
+      type: Groovy
+      roles: '@AllRoles'
+      file: operations.filters.SNVFilter.groovy          

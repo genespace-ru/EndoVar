@@ -92,7 +92,7 @@ snvs:
 
     - All records:
         type: 1D
-        roles: '@AllRoles'
+        roles: '@Guest'
         layout: '{"topForm":"SNVFilter", "quickType":"select"}'
         operations:
         - SNVFilter
@@ -112,16 +112,13 @@ snvs:
                 t.Pa AS "Pathogenicity;<quick visible='true' />",
                 t.GAF AS "GNOMAD3_AF;<quick visible='true' />",
                 t.Glt AS "GNOMAD3_nhomalt;<quick visible='true' />",
-                s.Rq AS "RUSeq;<quick visible='true' />",
-                s.CID AS "ClinVar_ID;<quick visible='true' />",
-                s.Cif AS "ClinVar_significance;<quick visible='true' />",
                 t.OMphe AS "OMIM_phenotype;<quick visible='true' />",
                 t.SAI AS "SPLICE_AI;<quick visible='true' />",
                 t.MVM AS "Meta_SVM;<quick visible='true' />",
                 t.BDl AS "BayesDel;<quick visible='true' />",
                 t.CD AS "CADD;<quick visible='true' />"
             FROM snvs s
-            LEFT JOIN tiers t ON t.V = s.V
+            LEFT JOIN tiers t ON s.V = t.V 
             WHERE (1=1)
             <if parameter="Variant">
               AND V LIKE '<parameter:Variant/>%'
