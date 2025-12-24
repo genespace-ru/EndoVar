@@ -101,15 +101,24 @@ genesupdated:
                 AS "CNV Duplications;<quick visible='true' />",
                 '<link table="cnvsfinal" using="HGNC,___gain" columns="Genes,status" />' AS ";CNV Duplications",
 
+                '<sql using="___HGNC,___gain">SELECT STRING_AGG(SUBSTRING(patients_diagnosis, 1, POSITION('-' IN patients_diagnosis) -1), '<br>') FROM cnvsfinal 
+                 WHERE genes LIKE ? AND status = ?</sql>'   
+                AS "CNV gain classes;<quick visible='true' />",                
+
                 '<sql using="___HGNC,___loss">SELECT count(*) FROM cnvsfinal c 
                  WHERE genes LIKE ? AND status = ? </sql>'     
                 AS "CNV Deletions;<quick visible='true' />",
                 '<link table="cnvsfinal" using="HGNC,___loss" columns="Genes,status" />' AS ";CNV Deletions",
 
+                '<sql using="___HGNC,___loss">SELECT STRING_AGG(SUBSTRING(patients_diagnosis, 1, POSITION('-' IN patients_diagnosis) -1), '<br>') FROM cnvsfinal 
+                 WHERE genes LIKE ? AND status = ?</sql>'   
+                AS "CNV loss classes;<quick visible='true' />",
+
                 '<sql using="HGNC">SELECT count(*) FROM tiers t 
                  WHERE t.G = ? </sql>' 
                 AS "SNV;<quick visible='true' />",
                 '<link table="tiers" using="HGNC" columns="gene" />' AS ";SNV"
+
             FROM genesupdated gup
 
             WHERE (1=1)
