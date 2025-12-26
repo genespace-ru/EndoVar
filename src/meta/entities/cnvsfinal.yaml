@@ -106,7 +106,7 @@ cnvsfinal:
                 Chrom AS "Chr",
                 seq_start AS "Start",
                 seq_end AS "End",
-                Positions AS "Positions;<quick visible='true' />",
+                Positions AS "positions;<quick visible='true' />",
                 status AS "Class",
                 pat_status AS "Pathogenicity;<quick visible='true' />",
                 Newly_discovered AS "Newly_discovered;<quick visible='true' />",
@@ -115,6 +115,10 @@ cnvsfinal:
                 clinvar_cnvs_phenotypes AS "dbVar associated phenotype;<quick visible='true' />",
                 clinvar_cnvs_clin_int AS "Clinical interpretation;<quick visible='true' />",
                 patients_qty_with_CNV AS "Quantity of patients with CNV;<quick visible='true' />",
+
+
+                COUNT(*) OVER (PARTITION BY Positions, pat_status, status) as "duplicate_count",
+
                 patients_diagnosis AS "Patient's diagnosis;<quick visible='true' />;",
                 ICD10_patients_diagnosis AS "ICD10 codes of diagnosis;<quick visible='true' />"
             FROM cnvsfinal

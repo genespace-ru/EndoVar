@@ -113,11 +113,13 @@ tiers:
         code: |
             SELECT
                 V AS "Variant",
+                V AS "___variant",
                 C AS "CHR",
                 P AS "Position",
                 R AS "REF",
                 A AS "ALT",
-                G AS "Gene;<quick visible='true' />",
+                G AS "Gene;<quick visible='true' />", 
+
                 Exon AS "Exon;<quick visible='true' />",
                 HGVSp AS "HGVSp;<quick visible='true' />",
                 aac AS "Aminoacid change;<quick visible='true' />",
@@ -143,8 +145,7 @@ tiers:
             <if parameter="pa">
               AND pa = <parameter:pa/>
             </if>                              
-            ORDER BY pa
-            
+            ORDER BY pa            
   operations:
   - SNVFilter:
       type: Groovy

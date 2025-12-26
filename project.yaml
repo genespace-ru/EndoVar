@@ -23,6 +23,7 @@ EndoVar:
   - cnvsallupdated
   - cnvsfinal
   - tiers
+  - snvspats
   scripts:
   - Post-db
   - dictionaries
@@ -34,3 +35,4 @@ EndoVar:
   - cnvsallupdated
   - cnvsfinal
   - tiers
+  - snvspats
