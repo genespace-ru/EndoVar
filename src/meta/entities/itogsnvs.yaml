@@ -1,6 +1,6 @@
 itogsnvs:
   type: table
-  displayName: itogSNV
+  displayName: SNV
   order: '33'
   primaryKey: ID
   scheme:

@@ -25,6 +25,7 @@ EndoVar:
   - tiers
   - snvspats
   - itogsnvs
+  - icds
   scripts:
   - Post-db
   - dictionaries
@@ -38,3 +39,4 @@ EndoVar:
   - tiers
   - snvspats
   - itogsnvs
+  - icds

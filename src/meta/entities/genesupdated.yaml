@@ -73,9 +73,9 @@ genesupdated:
     - All records:
         type: 1D
         roles: '@AllRoles'
-        layout: '{"topForm":"GeneNEWFilter", "quickType":"select"}'
+        layout: '{"topForm":"GenesFilter", "quickType":"select"}'
         operations:
-        - GeneNEWFilter
+        - GenesFilter
         code: |
             SELECT 
                 HGNC AS "HGNC",
@@ -119,8 +119,8 @@ genesupdated:
                 AS "SNV;<quick visible='true' />",
                 '<link table="itogsnvs" using="HGNC" columns="G" />' AS ";SNV", 
 
-                '<sql using="___HGNC">SELECT Ds FROM itogsnvs isnv
-                 WHERE isnv.G LIKE ? </sql>'   
+                '<sql using="___HGNC">SELECT Ds FROM itogsnvs
+                 WHERE itogsnvs.G LIKE ? </sql>'   
                 AS "Snv diagnosis;<quick visible='true' />"
 
             FROM genesupdated gup
@@ -129,10 +129,14 @@ genesupdated:
             <if parameter="HGNC">
               AND gup.HGNC LIKE '<parameter:HGNC/>%'
             </if>
-            <if parameter="Diagnosis">
-              AND gup.CNV_patients_diagnosis LIKE '%<parameter:Diagnosis/>%'
+            <if parameter="DiagnosisCNVs">
+              AND gup.CNV_patients_diagnosis LIKE '%<parameter:DiagnosisCNVs/>%'
             </if> 
-            ORDER BY HGNC
+            <if parameter="DiagnosisSNVs">
+              AND itogsnvs.Ds LIKE '%<parameter:DiagnosisSNVs/>%'
+            </if> 
+            ORDER BY HGNC            
+
 
 #    - Card:
  #       layout: '{"tableBox":"gene", "mode":"named", "hideTitle":"true"}'
@@ -151,8 +155,8 @@ genesupdated:
    #         FROM genes
 
   operations:
-  - GeneNEWFilter:
+  - GenesFilter:
       type: Groovy
       roles: '@AllRoles'
-      file: operations.filters.GeneNEWFilter.groovy
+      file: operations.filters.GenesFilter.groovy
 

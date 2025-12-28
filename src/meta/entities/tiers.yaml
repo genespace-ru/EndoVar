@@ -106,7 +106,7 @@ tiers:
 
     - All records:
         type: 1D
-        roles: '@AllRoles'
+        roles: '@Guest'
         layout: '{"topForm":"SNVFilter", "quickType":"select"}'  
         operations:
         - SNVFilter      

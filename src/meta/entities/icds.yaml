@@ -1,0 +1,59 @@
+icds:
+  type: table
+  displayName: ICD10
+  order: '34'
+  primaryKey: ID
+  scheme:
+    columns:
+    - ID:
+        type: KEYTYPE
+        autoIncrement: true
+        primaryKey: true
+        doc: Gene internal identifier.
+    - ICD10Code:
+        type: VARCHAR(1900)
+        doc: The HGNC approved gene symbol
+    - ICD10Desc:
+        type: VARCHAR(1900)
+        doc: The HGNC approved gene symbol
+    - Diagnosis:
+        type: VARCHAR(1900)
+        doc: The HGNC approved gene symbol
+
+  queries:
+
+    - '*** Selection view ***':
+        type: 1D
+        roles: '@AllRoles'
+        code: |
+            SELECT 
+                ID AS "Code"
+            FROM icds
+
+    - All records:
+        type: 1D
+        roles: '@AllRoles'
+        layout: '{"topForm":"ICD10Filter"}'
+        operations:
+        - ICD10Filter
+        code: |
+            SELECT 
+                ICD10Code AS "ICD10 Code",
+                ICD10Desc AS "Code description",
+                Diagnosis AS "Diagnosis"                
+            FROM icds 
+            WHERE (1=1)
+            <if parameter="ICD10Code">
+              AND ICD10Code = '<parameter:ICD10Code/>'
+            </if>
+            <if parameter="Diagnosis">
+              AND Diagnosis LIKE '%<parameter:Diagnosis/>%'
+            </if>
+            ORDER BY ICD10Code
+
+  operations:
+  - ICD10Filter:
+      type: Groovy
+      roles: '@AllRoles'
+      file: operations.filters.ICD10Filter.groovy
+
