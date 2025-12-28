@@ -114,10 +114,14 @@ genesupdated:
                  WHERE genes LIKE ? AND status = ?</sql>'   
                 AS "CNV loss classes;<quick visible='true' />",
 
-                '<sql using="HGNC">SELECT count(*) FROM tiers t 
+                '<sql using="HGNC">SELECT count(*) FROM itogsnvs t 
                  WHERE t.G = ? </sql>' 
                 AS "SNV;<quick visible='true' />",
-                '<link table="tiers" using="HGNC" columns="gene" />' AS ";SNV"
+                '<link table="itogsnvs" using="HGNC" columns="G" />' AS ";SNV", 
+
+                '<sql using="___HGNC">SELECT Ds FROM itogsnvs isnv
+                 WHERE isnv.G LIKE ? </sql>'   
+                AS "Snv diagnosis;<quick visible='true' />"
 
             FROM genesupdated gup
 

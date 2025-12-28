@@ -1,0 +1,171 @@
+itogsnvs:
+  type: table
+  displayName: itogSNV
+  order: '33'
+  primaryKey: ID
+  scheme:
+    columns:
+    - ID:
+        type: KEYTYPE
+        autoIncrement: true
+        primaryKey: true
+        doc: SNV internal identifier.
+    - V:
+        type: VARCHAR(1000)
+        doc: Variant
+    - C:
+        type: VARCHAR(100)
+        doc: Chromosome number
+    - R:
+        type: VARCHAR(1000)
+        doc: Reference base
+    - A:
+        type: VARCHAR(1000)
+        doc: Alternative base
+    - P:
+        type: VARCHAR(100)
+        doc: SNV position
+    - G:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: Gene name
+    - Pa:
+        type: VARCHAR(20)
+        doc: Algorithmically predicted pathogenicity level
+    - GAF:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: gnomAD allele frequency
+    - Glt:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: gnomaAD number of homozygotes 
+    - VCT:
+        type: VARCHAR(200)
+        canBeNull: true
+        doc: Variant impact on protein  
+    - VC:
+        type: VARCHAR(500)
+        canBeNull: true
+        doc: VEP consequence            
+    - SAI:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: Predicted effect on splicing by SpliceAI tool
+    - MVM:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: MetaSVM prediction
+    - BDl:
+        type: VARCHAR(200)
+        canBeNull: true
+        doc: BayesDel prediction
+    - CD:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: CADD_phred score     
+    - Exon:
+        type: VARCHAR(20)
+        canBeNull: true
+        doc: Exon number          
+    - HGVSp:
+        type: VARCHAR(500)
+        canBeNull: true
+        doc: protein
+    - aac:
+        type: VARCHAR(500)
+        canBeNull: true
+        doc: aminoacid change
+    - y:
+        type: VARCHAR(1000)
+        canBeNull: true
+        doc: cDNA change
+    - GT:
+        type: VARCHAR(1000)
+        canBeNull: true
+        doc: cDNA change        
+    - NPN:
+        type: int
+        canBeNull: true
+        doc: cDNA change
+    - s:
+        type: VARCHAR(10)
+        doc: gender
+    - Ds:
+        type: VARCHAR(100000)
+        doc: diagn
+    - Ic:
+        type: VARCHAR(10000)
+        doc: icd10s       
+
+  queries:
+
+    - '*** Selection view ***':
+        type: 1D
+        roles: '@AllRoles'
+        code: |
+            SELECT 
+                Pa
+            FROM itogsnvs
+    - PathogenicitySelectionView:
+        type: 1D_unknown
+        code: |-
+          SELECT 
+            Pa
+          FROM itogsnvs
+          GROUP BY Pa
+
+    - All records:
+        type: 1D
+        roles: '@AllRoles'
+        layout: '{"topForm":"SNVFilter", "quickType":"select"}'  
+        operations:
+        - SNVFilter      
+        code: |
+            SELECT
+                V AS "Variant",
+                V AS "___variant",
+                C AS "CHR",
+                P AS "Position",
+                R AS "REF",
+                A AS "ALT",
+                G AS "Gene;<quick visible='true' />",
+                GT AS "GT",
+                s AS "Gender;<quick visible='true' />",                
+                NPN AS "Number of Patients",
+                Exon AS "Exon;<quick visible='true' />",
+                HGVSp AS "HGVSp;<quick visible='true' />",
+                aac AS "Aminoacid change;<quick visible='true' />",
+                y AS "cDNA change;<quick visible='true' />",
+                VCT AS "VEP_IMPACT;<quick visible='true' />",
+                VC AS "VEP_consequence;<quick visible='true' />",               
+                Pa AS "Pathogenicity",
+                GAF AS "GNOMAD3_AF;<quick visible='true' />",
+                Glt AS "GNOMAD3_nhomalt;<quick visible='true' />",
+                SAI AS "SPLICE_AI;<quick visible='true' />",
+                MVM AS "Meta_SVM;<quick visible='true' />",
+                BDl AS "BayesDel;<quick visible='true' />",
+                CD AS "CADD;<quick visible='true' />",
+                BDl AS "BayesDel;<quick visible='true' />",
+                Ds AS "Diagnosis;<quick visible='true' />",
+                Ic AS "ICD10 codes;<quick visible='true' />"
+            FROM itogsnvs    
+            WHERE (1=1)
+            <if parameter="Variant">
+              AND V LIKE '<parameter:Variant/>%'
+            </if>  
+            <if parameter="gene">
+              AND G = '<parameter:gene/>'
+            </if>       
+            <if parameter="pa">
+              AND Pa = <parameter:pa/>
+            </if> 
+            <if parameter="Diagnosis">
+              AND Ds LIKE '%<parameter:Diagnosis/>%'
+            </if>                                         
+            ORDER BY Pa            
+  operations:
+  - SNVFilter:
+      type: Groovy
+      roles: '@AllRoles'
+      file: operations.filters.SNVFilter.groovy          
